@@ -1,55 +1,51 @@
-import React, {useState} from 'react'
+// useEffect() =    React Hook that tells React DO SOME CODE WHEN (pick one):
+//                  This component re-renders
+//                  This component mounts
+//                  The state of a value changes
+//                  Think of 'Effect' as 'side code'
+
+// useEffect(function, [dependecies])
+
+// 1. useEffect(() => {})           // Runs after every re-render
+// 2. useEffect(() => {}, [])       // Runs only on mount
+// 3. useEffect(() => {}, [value])  // Runs on mount + when a value changes
+
+// USES
+// #1 Event Listeners
+// #2 DOM manipulation
+// #3 Subscriptions (real-time updates)
+// #4 Fetching Data from an API
+// #5 Clean up when a component unmounts
+
+import React, {useState, useEffect} from 'react'
 
 function MyComponent(){
 
-    const [cars, setCars] = useState([]);
-    const [carYear, setCarYear] = useState(new Date().getFullYear());
-    const [carMake, setCarMake] = useState("");
-    const [carModel, setCarModel] = useState("");
+    const [count, setCount] = useState(0);
+    const [color, setColor] = useState("green")
 
-    function handleAddCar(){
-        const newCar = {year: carYear, make: carMake, model: carModel};
+    useEffect(() => {
+        document.title = `Count: ${count} ${color}`;
+    }, [count, color]);
 
-        setCars(prevCars => [...prevCars, newCar]);
-
-        setCarYear(new Date().getFullYear());
-        setCarMake("");
-        setCarModel("");
+    function addCount(){
+        setCount(prevCount => prevCount + 1);
     }
 
-    function handleRemoveCar(index){
-        setCars(prevCars => prevCars.filter((_, i) => i !== index));
+    function subtractCount(){
+        setCount(prevCount => prevCount - 1);
     }
 
-    function handleYearChange(event){
-        setCarYear(event.target.value)
-    }
-
-    function handleMakeChange(event){
-        setCarMake(event.target.value)
-    }
-
-    function handleModelChange(event){
-        setCarModel(event.target.value)
+    function changeColor(){
+        setColor(c => c === "green" ? "red" : "green");
     }
 
     return (
         <div>
-            <h2>List of Car objects</h2>
-            <ul>
-                {cars.map((car, index) => 
-                <li key={index} onClick={() => handleRemoveCar(index)}>
-                    {car.year} {car.make} {car.model}
-                </li>)}
-            </ul>
-
-            <input type="number" value={carYear} onChange={handleYearChange}/> <br />
-            <input type="text" value={carMake} onChange={handleMakeChange} placeholder='Enter car make'/> <br />
-            <input type="text" value={carModel} onChange={handleModelChange} placeholder='Enter car model'/> <br />
-
-            <button onClick={handleAddCar}>Add car</button>
-
-
+            <p style={{color: color}}>Count: {count}</p>
+            <button onClick={addCount}>Add</button>
+            <button onClick={subtractCount}>Subtract</button><br />
+            <button onClick={changeColor}>Chnage color</button>
         </div>
     );
 }
